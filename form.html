@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+        input, select, textarea { width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 14px; background: #4CAF50; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Event Feedback Form</h2>
+        <form id="feedbackForm">
+            <input type="text" id="name" placeholder="Nama" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="eventName" placeholder="Nama Event" required>
+
+            <select id="division" required>
+                <option value="">Pilih Divisi</option>
+                <option value="LnT">LnT</option>
+                <option value="EEO">EEO</option>
+                <option value="PR">PR</option>
+                <option value="HRD">HRD</option>
+                <option value="RnD">RnD</option>
+            </select>
+
+            <select id="rating" required>
+                <option value="">Rating (1 - 5)</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <textarea id="comment" placeholder="Komentar (opsional)"></textarea>
+            <textarea id="suggestion" placeholder="Saran (opsional)"></textarea>
+
+            <button type="submit">Kirim Feedback</button>
+        </form>
+    </div>
+
+<script>
+    const form = document.getElementById("feedbackForm");
+
+    function loadData() {
+        return JSON.parse(localStorage.getItem("feedback_data") || "[]");
+    }
+
+    function saveData(data) {
+        localStorage.setItem("feedback_data", JSON.stringify(data));
+    }
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        let data = loadData();
+
+        const entry = {
+            id: Date.now(),
+            name: name.value,
+            email: email.value,
+            eventName: eventName.value,
+            division: division.value,
+            rating: Number(rating.value),
+            comment: comment.value,
+            suggestion: suggestion.value,
+            createdAt: new Date().toISOString(),
+            status: "open"
+        };
+
+        data.push(entry);
+        saveData(data);
+
+        alert("Feedback berhasil dikirim!");
+        form.reset();
+    });
+</script>
+</body>
+</html>
