@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial; background: #f7f7f7; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; }
+        th { background: #eee; }
+        input, select { padding: 8px; margin-right: 10px; }
+        button { padding: 6px 10px; margin-right: 5px; cursor: pointer; }
+        .edit-btn { background: #2980b9; color: white; border: none; }
+        .delete-btn { background: #e74c3c; color: white; border: none; }
+        .save-btn { background: #27ae60; color: white; border: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Admin Panel - Manage Feedback</h2>
+
+    <input type="text" id="search" placeholder="Search nama/event...">
+    <select id="filterStatus">
+        <option value="all">Semua Status</option>
+        <option value="open">Open</option>
+        <option value="in-review">In Review</option>
+        <option value="resolved">Resolved</option>
+    </select>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Event</th>
+                <th>Division</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    const tableBody = document.getElementById("tableBody");
+    const search = document.getElementById("search");
+    const filterStatus = document.getElementById("filterStatus");
+
+    function loadData() {
+        return JSON.parse(localStorage.getItem("feedback_data") || "[]");
+    }
+
+    function saveData(data) {
+        localStorage.setItem("feedback_data", JSON.stringify(data));
+    }
+
+    function render() {
+        let data = loadData();
+
+        // filter search
+        const keyword = search.value.toLowerCase();
+        data = data.filter(f =>
+            f.name.toLowerCase().includes(keyword) ||
+            f.eventName.toLowerCase().includes(keyword)
+        );
+
+        // filter status
+        if (filterStatus.value !== "all") {
+            data = data.filter(f => f.status === filterStatus.value);
+        }
+
+        tableBody.innerHTML = "";
+
+        data.forEach(item => {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.email}</td>
+                <td><input value="${item.eventName}" onchange="updateField(${item.id}, 'eventName', this.value)"></td>
+                <td>
+                    <select onchange="updateField(${item.id}, 'division', this.value)">
+                        <option ${item.division==='LnT'?'selected':''}>LnT</option>
+                        <option ${item.division==='EEO'?'selected':''}>EEO</option>
+                        <option ${item.division==='PR'?'selected':''}>PR</option>
+                        <option ${item.division==='HRD'?'selected':''}>HRD</option>
+                        <option ${item.division==='RnD'?'selected':''}>RnD</option>
+                    </select>
+                </td>
+                <td><input type="number" min="1" max="5" value="${item.rating}" onchange="updateField(${item.id}, 'rating', Number(this.value))"></td>
+                <td>
+                    <select onchange="updateField(${item.id}, 'status', this.value)">
+                        <option ${item.status==='open'?'selected':''}>open</option>
+                        <option ${item.status==='in-review'?'selected':''}>in-review</option>
+                        <option ${item.status==='resolved'?'selected':''}>resolved</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="delete-btn" onclick="deleteFeedback(${item.id})">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(tr);
+        });
+    }
+
+    function updateField(id, field, value) {
+        const data = loadData();
+        const index = data.findIndex(f => f.id === id);
+        if (index !== -1) {
+            data[index][field] = value;
+            saveData(data);
+            render();
+        }
+    }
+
+    function deleteFeedback(id) {
+        if (!confirm("Hapus feedback ini?")) return;
+        let data = loadData();
+        data = data.filter(f => f.id !== id);
+        saveData(data);
+        render();
+    }
+
+    search.addEventListener("input", render);
+    filterStatus.addEventListener("change", render);
+
+    render();
+</script>
+</body>
+</html>
