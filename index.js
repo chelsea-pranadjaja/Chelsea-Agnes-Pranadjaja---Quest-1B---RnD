@@ -113,6 +113,7 @@ app.get('/api/feedback', (req, res) => {
   );
 
   res.json(paginated);
+  res.json(feedbacks);
 });
 
 
@@ -153,7 +154,7 @@ app.delete('/api/feedback/:id', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/form.html');
+  res.sendFile(__dirname + '/public/feedback.html');
 });
 
 
@@ -163,4 +164,3 @@ app.get('/admin', (req, res) => {
 
 
 app.listen(3000);
-
