@@ -154,12 +154,12 @@ app.delete('/api/feedback/:id', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/feedback.html');
+  res.sendFile(__dirname + '/feedback.html');
 });
 
 
 app.get('/admin', (req, res) => {
-  res.sendFile(__dirname + '/public/admin.html');
+  res.sendFile(__dirname + '/admin.html');
 });
 
 
