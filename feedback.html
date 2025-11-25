@@ -63,13 +63,13 @@
 
         const entry = {
             id: Date.now(),
-            name: name.value,
-            email: email.value,
-            eventName: eventName.value,
-            division: division.value,
-            rating: Number(rating.value),
-            comment: comment.value,
-            suggestion: suggestion.value,
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            eventName: document.getElementById("eventName").value,
+            division: document.getElementById("division").value,
+            rating: Number(document.getElementById("rating").value),
+            comment: document.getElementById("comment").value,
+            suggestion: document.getElementById("suggestion").value,
             createdAt: new Date().toISOString(),
             status: "open"
         };
