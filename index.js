@@ -153,7 +153,7 @@ app.delete('/api/feedback/:id', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/feedback.html');
+  res.sendFile(__dirname + '/public/form.html');
 });
 
 
@@ -163,3 +163,4 @@ app.get('/admin', (req, res) => {
 
 
 app.listen(3000);
+
