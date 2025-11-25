@@ -42,7 +42,7 @@ function search(list, query) {
   const w = query.toLowerCase();
 
   return list.filter(fb =>
-    f.name.toLowerCase().includes(w) || f.email.toLowerCase().includes(w) || f.eventName.toLowerCase().includes(w)
+    fb.name.toLowerCase().includes(w) || fb.email.toLowerCase().includes(w) || fb.eventName.toLowerCase().includes(w)
   );
 }
 
@@ -113,7 +113,6 @@ app.get('/api/feedback', (req, res) => {
   );
 
   res.json(paginated);
-  res.json(feedbacks);
 });
 
 
