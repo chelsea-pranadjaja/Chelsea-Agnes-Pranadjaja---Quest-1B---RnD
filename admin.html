@@ -63,10 +63,12 @@
 
         // filter search
         const keyword = search.value.toLowerCase();
-        data = data.filter(f =>
-            f.name.toLowerCase().includes(keyword) ||
-            f.eventName.toLowerCase().includes(keyword)
-        );
+        data = data.filter(f => {
+    if (!f) return false;
+    const name = (f.name || "").toLowerCase();
+    const eventName = (f.eventName || "").toLowerCase();
+    return name.includes(keyword) || eventName.includes(keyword);
+});
 
         // filter status
         if (filterStatus.value !== "all") {
